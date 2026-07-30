@@ -1,0 +1,272 @@
+:root {
+  --bg: #1B2430;
+  --panel: #1F2937;
+  --gold: #D8A73D;
+  --green: #3E7C59;
+  --text: #ebe1d5;
+  --muted: #d2c5b0;
+  --radius: 14px;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.topbar {
+  padding: 24px 20px 8px;
+  text-align: center;
+}
+
+.brand {
+  font-family: 'Cambria', 'Georgia', 'Times New Roman', serif;
+  font-size: 2.4rem;
+  margin: 0;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.tagline {
+  color: var(--muted);
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+}
+
+.chat-wrap {
+  max-width: 780px;
+  margin: 20px auto 40px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.messages {
+  background: transparent;
+  min-height: 55vh;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  line-height: 1.45;
+  word-wrap: break-word;
+  box-shadow: var(--shadow);
+  animation: fade 160ms ease-out;
+}
+
+@keyframes fade { from { opacity: 0; transform: translateY(4px);} to {opacity:1; transform:none;} }
+
+.bubble.bot {
+  align-self: flex-start;
+  background: var(--panel);
+  border-left: 3px solid var(--gold);
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: var(--green);
+  color: #fff;
+}
+
+.bubble .source {
+  display: block;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 6px;
+}
+
+.speak-btn {
+  margin-top: 8px;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 120ms;
+}
+.speak-btn:hover { background: rgba(216, 167, 61, 0.12); }
+.speak-btn.stopping { color: #fff; background: var(--gold); }
+
+.attachment-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(216, 167, 61, 0.08);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.82rem;
+  max-width: 100%;
+}
+.attachment-card:hover { background: var(--gold); color: var(--bg); }
+.attachment-icon { font-size: 1rem; }
+.attachment-label { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.attachment-action { font-size: 0.72rem; opacity: 0.85; flex-shrink: 0; }
+
+.composer {
+  display: flex;
+  gap: 8px;
+  background: var(--panel);
+  padding: 8px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.composer input[type="text"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1rem;
+  padding: 10px 8px;
+  outline: none;
+}
+
+.composer input::placeholder { color: var(--muted); }
+
+.primary-btn {
+  background: var(--gold);
+  color: #1B2430;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--muted);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+.icon-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-btn {
+  background: var(--panel);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.file-btn:hover { border-color: var(--gold); }
+
+.ghost-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--muted);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.ghost-btn:hover { color: var(--text); border-color: var(--text); }
+
+.status { color: var(--muted); font-size: 0.85rem; margin-left: auto; }
+
+#mic-btn.active {
+  color: var(--gold);
+  background: rgba(216, 167, 61, 0.18);
+  animation: mic-pulse 1.1s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(216, 167, 61, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(216, 167, 61, 0); }
+}
+
+.typing {
+  color: var(--muted);
+  font-style: italic;
+  padding: 6px 4px;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* ---------------------------------------------------------------------
+   Mobile-only redesign (matches the Stitch mobile mockup).
+   Scoped to max-width: 767px (Tailwind's `md` breakpoint) so the desktop
+   and tablet layouts above that width are completely untouched.
+--------------------------------------------------------------------- */
+.bubble-meta {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* Use the real, keyboard-aware visible height instead of a plain 100vh so
+     the composer rises above the on-screen keyboard instead of being hidden
+     behind it. Falls back gracefully on browsers without JS/dvh support. */
+  main.h-screen {
+    height: 100vh;
+    height: 100dvh;
+    height: var(--app-vh, 100dvh);
+  }
+
+  .bubble.bot {
+    border-top-left-radius: 2px;
+  }
+  .bubble.user {
+    border-top-right-radius: 2px;
+  }
+
+  .bubble-meta {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: -6px 4px 4px;
+  }
+  .bubble-meta[data-align="right"] { align-self: flex-end; text-align: right; }
+  .bubble-meta[data-align="left"] { align-self: flex-start; text-align: left; }
+
+  #messages {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Pill highlight behind the active icon in the mobile bottom nav */
+  .mobile-nav-link .nav-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 2px 14px;
+    transition: background-color 150ms ease;
+  }
+  .mobile-nav-link.mobile-nav-active .nav-icon-wrap {
+    background: rgba(216, 167, 61, 0.18);
+  }
+}

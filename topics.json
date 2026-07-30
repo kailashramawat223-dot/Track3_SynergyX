@@ -1,0 +1,50 @@
+{
+  "topics": {
+    "placement": {
+      "label": "MBM website — placement page",
+      "url": "https://www.mbm.ac.in/newsroom/training-and-placement",
+      "keywords": ["placement", "job", "jobs", "tnp", "training", "recruit", "recruitment", "company", "companies", "package", "internship"]
+    },
+    "syllabus": {
+      "label": "MBM website — scheme & syllabus page",
+      "url": "https://www.mbm.ac.in/newsroom/scheme-syllabus",
+      "keywords": ["syllabus", "scheme", "curriculum", "course content", "subjects", "units", "paathyakram"]
+    },
+    "notices": {
+      "label": "MBM website — notices page",
+      "url": "https://www.mbm.ac.in/newsroom/notices",
+      "keywords": ["notice", "notices", "notification", "circular", "announcement", "suchana"]
+    },
+    "exam": {
+      "label": "MBM website — examination page",
+      "url": "https://www.mbm.ac.in/newsroom/examination",
+      "keywords": ["exam", "exams", "examination", "result", "results", "datesheet", "date sheet", "time table", "timetable", "schedule", "pariksha"]
+    },
+    "hostel": {
+      "label": "MBM website — hostel page",
+      "url": "https://www.mbm.ac.in/newsroom/hostel",
+      "keywords": ["hostel", "mess", "room", "accommodation", "warden", "chhatrawas"]
+    },
+    "calendar": {
+      "label": "MBM website — academic calendar",
+      "url": "https://www.mbm.ac.in/newsroom/academic-calendar",
+      "keywords": ["calendar", "academic calendar", "semester dates", "holiday", "holidays"]
+    },
+    "admission": {
+      "label": "MBM website — admission page",
+      "url": "https://www.mbm.ac.in/newsroom/admission",
+      "keywords": ["admission", "admissions", "apply", "application", "eligibility", "counselling", "pravesh"]
+    },
+    "scholarship": {
+      "label": "MBM website — scholarship page",
+      "url": "https://www.mbm.ac.in/newsroom/scholarship",
+      "keywords": ["scholarship", "scholarships", "fellowship", "financial aid", "stipend", "chhatravriti"]
+    },
+    "home": {
+      "label": "MBM website — home page",
+      "url": "https://www.mbm.ac.in/",
+      "keywords": ["mbm", "university", "about", "contact", "campus", "jodhpur"]
+    }
+  },
+  "default_topic": "home"
+}
