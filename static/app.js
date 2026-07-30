@@ -99,7 +99,7 @@ function addBubble({ role, text, source, attachments }) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'speak-btn';
-    btn.textContent = '🔊 Sunein';
+    btn.textContent = '🔊 Listen';
     btn.addEventListener('click', () => toggleSpeak(btn, text));
     b.appendChild(btn);
   }
@@ -123,7 +123,7 @@ function addBubble({ role, text, source, attachments }) {
 function addTyping() {
   const t = document.createElement('div');
   t.className = 'typing';
-  t.textContent = 'CampusMitra soch raha hai…';
+  t.textContent = 'CampusMitra is thinking…';
   els.messages.appendChild(t);
   els.messages.scrollTop = els.messages.scrollHeight;
   return t;
@@ -134,7 +134,7 @@ function addTyping() {
 // ---------------------------------------------------------------------------
 function resetSpeakBtn(btn) {
   if (!btn) return;
-  btn.textContent = '🔊 Sunein';
+  btn.textContent = '🔊 Listen';
   btn.classList.remove('stopping');
 }
 
@@ -224,7 +224,7 @@ if (SR) {
   recognizer.onend = () => els.mic.classList.remove('active');
   recognizer.onerror = () => {
     els.mic.classList.remove('active');
-    setStatus('Mic band ho gaya. Dubara try karein.');
+    setStatus('Mic turned off. Please try again.');
   };
 } else {
   els.mic.disabled = true;
@@ -235,7 +235,7 @@ els.mic.addEventListener('click', () => {
   if (!recognizer) return;
   try {
     els.mic.classList.add('active');
-    setStatus('Sun raha hoon…');
+    setStatus('Listening…');
     recognizer.start();
   } catch (_) {
     recognizer.stop();
@@ -376,7 +376,7 @@ els.reset.addEventListener('click', async () => {
   if (activeSpeakBtn) { resetSpeakBtn(activeSpeakBtn); activeSpeakBtn = null; }
   history = [];
   els.messages.innerHTML = '';
-  setStatus('Baat-cheet reset ho gayi.');
+  setStatus('Conversation reset.');
   try { await fetch('/api/reset', { method: 'POST' }); } catch (_) {}
   greet();
 });
