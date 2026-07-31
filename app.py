@@ -297,17 +297,32 @@ def fetch_topic_context(topic_cfg: dict, question: str) -> tuple[str, str, list[
     return combined, label, file_links
 
 
-def page_seems_relevant(question: str, page_text: str) -> bool:
+def page_relevance_score(question: str, page_text: str) -> int:
+    """Count how many of the question's keywords actually appear in the
+    page text — used to compare against PDF relevance, instead of a
+    single-keyword boolean that was too easily satisfied by accident."""
     if not page_text:
-        return False
+        return 0
     words = _question_keywords(question)
     if not words:
-        return True
+        return 1
     lowered = page_text.lower()
-    return any(w in lowered for w in words)
+    return sum(lowered.count(w) for w in words)
 
 
-def search_pdfs(question: str) -> tuple[str, str] | None:
+def page_seems_relevant(question: str, page_text: str) -> bool:
+    return page_relevance_score(question, page_text) > 0
+
+
+def pdf_relevance_score(question: str, pdf_text: str) -> int:
+    words = _question_keywords(question)
+    if not words:
+        return 0
+    lowered = pdf_text.lower()
+    return sum(lowered.count(w) for w in words)
+
+
+def search_pdfs(question: str) -> tuple[str, str, int] | None:
     with _pdf_lock:
         if not PDF_STORE:
             return None
@@ -324,8 +339,8 @@ def search_pdfs(question: str) -> tuple[str, str] | None:
 
     if best is None:
         return None
-    _score, pdf = best
-    return pdf["text"], f"uploaded PDF — {pdf['name']}"
+    score, pdf = best
+    return pdf["text"], f"uploaded PDF — {pdf['name']}", score
 
 
 def trim(text: str, limit: int = MAX_CONTEXT_CHARS) -> str:
@@ -352,22 +367,27 @@ def api_context():
     topic_key = detect_topic(question)
     topic_cfg = TOPICS_CONFIG["topics"][topic_key]
 
-    # 1. Main topic page + linked notice/PDF pages.
-    result = fetch_topic_context(topic_cfg, question)
-    if result is not None:
-        text, label, file_links = result
-        if page_seems_relevant(question, text):
-            return jsonify({
-                "context": trim(text),
-                "source": label,
-                "topic": topic_key,
-                "files": file_links,
-            })
+    # Fetch both possible sources, then compare how well each one actually
+    # matches the question — instead of trusting the website just because
+    # it loaded, or ignoring an uploaded PDF that has the real answer.
+    website_result = fetch_topic_context(topic_cfg, question)
+    website_score = 0
+    if website_result is not None:
+        website_text, website_label, website_files = website_result
+        website_score = page_relevance_score(question, website_text)
+    else:
+        website_text = website_label = ""
+        website_files = []
 
-    # 2. Fall back to uploaded PDFs.
     pdf_hit = search_pdfs(question)
-    if pdf_hit is not None:
-        pdf_text, pdf_label = pdf_hit
+    pdf_score = pdf_hit[2] if pdf_hit else -1
+
+    # An uploaded PDF wins whenever it matches at least as well as the
+    # website content — the student uploaded it specifically because that
+    # information isn't reliably on the website (e.g. results/notices
+    # shared only in WhatsApp), so ties go to the PDF.
+    if pdf_hit is not None and pdf_score > 0 and pdf_score >= website_score:
+        pdf_text, pdf_label, _score = pdf_hit
         return jsonify({
             "context": trim(pdf_text),
             "source": pdf_label,
@@ -375,14 +395,23 @@ def api_context():
             "files": [],  # uploaded PDFs aren't linkable URLs
         })
 
-    # 3. If the page loaded but seemed irrelevant, still send it.
-    if result is not None:
-        text, label, file_links = result
+    if website_result is not None:
         return jsonify({
-            "context": trim(text),
-            "source": label,
+            "context": trim(website_text),
+            "source": website_label,
             "topic": topic_key,
-            "files": file_links,
+            "files": website_files,
+        })
+
+    # Website failed entirely — fall back to the PDF even with a weak score,
+    # rather than returning nothing.
+    if pdf_hit is not None:
+        pdf_text, pdf_label, _score = pdf_hit
+        return jsonify({
+            "context": trim(pdf_text),
+            "source": pdf_label,
+            "topic": "pdf",
+            "files": [],
         })
 
     return jsonify({
