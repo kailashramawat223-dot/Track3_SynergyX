@@ -9,7 +9,7 @@ ki latest update kya hai?"* or *"exam datesheet kab aayi?"* by typing or speakin
 and get a short, natural spoken-or-written answer instead of hunting through the
 university website or scrolling WhatsApp groups.
 
-**Live demo:** _add your deployed Render/Railway URL here once deployed_
+**Live demo:** [https://track3-synergyx.onrender.com/](https://track3-synergyx.onrender.com/)
 **Demo video:** `Track3_SynergyX_demo` (linked in submission form)
 
 ---
